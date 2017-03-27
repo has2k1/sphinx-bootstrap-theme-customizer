@@ -1,0 +1,6 @@
+[submodule "sphinx-bootstrap-theme"]
+	path = sphinx-bootstrap-theme
+	url = https://github.com/ryan-roemer/sphinx-bootstrap-theme.git
+[submodule "bootswatch"]
+	path = bootswatch
+	url = https://github.com/thomaspark/bootswatch.git

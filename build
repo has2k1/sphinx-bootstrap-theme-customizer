@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+# How the script works?
+# - Substitutes the brand_color setting in the variables.less file
+#   of the theme being customized. That is the only customization.
+# - Compiles and minimizes the css using the build.less to create
+#   bootstrap.min.css
+# - Copies files css, js and html template files from sphinx_bootstrap_theme
+#   into the right paths in the ./theme directory
+# - At the end of the process the ./theme directory can be copied to
+#   as sphinx directory and used as a local theme as documented here
+#   http://www.sphinx-doc.org/en/stable/theming.html#using-a-theme
+#   e.g. with these settings
+#     html_theme = "theme"
+#     html_theme_path = ["."]
+
+# What can go wrong?
+# - wrong input (i.e not a valid color)
+# - boostrap or bootwatch version changes
+# - layout.html changes where it finds the css and js files
+
+tcolor=$(tput setaf 7)  # trace color
+ocolor=$(tput setaf 4)  # options color
+reset=$(tput sgr0)      # reset color codes
+
+themes=(cerulean cosmo cyborg darkly flatly journal lumen
+ paper readable sandstone simplex slate solar spacelab
+ superhero united yeti)
+
+usage() {
+  cat <<EOF
+Usage: build brand_color [base_theme]
+    brand_color : brand_color (in quotes e.g '#FF12AD')
+    base_theme: Theme whose brand_color is to be changed. This is
+                is optional (default is united), should be one of the
+                following:$ocolor
+${themes[*]} $reset
+EOF
+}
+
+# Some argument verification
+if [[ $# -eq 0 ]] || [[ $# -gt 2 ]]; then
+  usage
+  exit 1
+elif [[ $# -eq 1 ]]; then
+  brand_color=$1
+  base_theme='united'
+elif [[ $# -eq 2 ]]; then
+  brand_color=$1
+  base_theme=$2
+fi
+
+if [[ ! " ${themes[@]} " =~ " ${base_theme} " ]]; then
+  usage
+  exit 1
+fi
+
+# Debugging friends
+export PS4='$tcolor+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }$reset'
+# set -o xtrace
+
+base_theme_dir="./bootswatch/$base_theme/"
+bootstrap_dir="sphinx-bootstrap-theme/sphinx_bootstrap_theme/bootstrap"
+bootstrap_version="bootstrap-3.3.6"
+variables_file="theme/variables.less"
+
+# Destination directories
+theme_dir=theme
+bootstrap_css_dir=theme/static/$bootstrap_version/css
+bootstrap_js_dir=theme/static/$bootstrap_version/js
+jquery_dir=theme/static/js
+
+# Create theme directory structure
+rm -rf $theme_dir
+mkdir -p $bootstrap_css_dir
+mkdir -p $bootstrap_js_dir
+mkdir -p $jquery_dir
+
+# Copy less files
+cp -f {$base_theme_dir,$theme_dir}/variables.less
+cp -f {$base_theme_dir,$theme_dir}/bootswatch.less
+
+# Do customization
+{ cat $variables_file | \
+  sed -e "s/\(@brand-primary:\s\+\)\(#\w\+\);/\1$brand_color;/g"
+} > $variables_file.2
+
+mv -f $variables_file.2 $variables_file
+
+# Compile and minify (into the final destination)
+lessc build.less > theme/bootstrap.css
+cleancss -o $bootstrap_css_dir/bootstrap.min.css theme/bootstrap.css
+
+# Cleanup
+rm -rf theme/*.less
+rm -rf theme/bootstrap.css
+
+# Collect the css
+cp {$bootstrap_dir,$theme_dir}/static/bootstrap-sphinx.css_t
+
+# Collect the js
+cp $bootstrap_dir/static/js/jquery*.js $jquery_dir
+cp {$bootstrap_dir,$theme_dir}/static/$bootstrap_version/js/bootstrap.min.js
+cp {$bootstrap_dir,$theme_dir}/static/bootstrap-sphinx.js_t
+
+# Copy the sphinx conf file and html templates
+cp {$bootstrap_dir,$theme_dir}/theme.conf
+cp $bootstrap_dir/*.html $theme_dir/
