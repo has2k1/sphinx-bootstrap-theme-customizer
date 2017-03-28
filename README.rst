@@ -7,6 +7,11 @@ the variety of `Bootswatch`_ CSS themes. Though well organized, the
 process from customization to usable Sphinx theme is elaborate. This
 customizer automates that process.
 
+As the Bootswatch themes were not specifically designed for styling
+code documentation, the CSS is also modified (see: `sphinx.less` and
+`code_pygments.css` files) to improve code layout and highlighting
+as required by sphinx. These modifications borrow from `sphinx_rtd_theme`_.
+
 
 How does it work?
 =================
@@ -76,3 +81,4 @@ These `npm instructions`_ may be useful.
 .. _`Sphinx documentation on theming`: http://www.sphinx-doc.org/en/stable/theming.html#using-a-theme, 
 .. _nodejs: https://nodejs.org/en/
 .. _`npm instructions`: http://stackoverflow.com/questions/10081293/install-npm-into-home-directory-with-distribution-nodejs-package-ubuntu/13021677#13021677
+.. _`sphinx_rtd_theme`: https://github.com/rtfd/sphinx_rtd_theme

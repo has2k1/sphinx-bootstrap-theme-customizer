@@ -89,7 +89,7 @@ mv -f $variables_file.2 $variables_file
 
 # Compile and minify (into the final destination)
 lessc build.less > theme/bootstrap.css
-cleancss -o $bootstrap_css_dir/bootstrap.min.css theme/bootstrap.css
+cleancss -o $bootstrap_css_dir/bootstrap.min.css theme/bootstrap.css code_pygments.css
 
 # Cleanup
 rm -rf theme/*.less
