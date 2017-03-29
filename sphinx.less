@@ -4,6 +4,8 @@
 // overload. We try to remedy those short falls.
 //
 // This is inspired by the sphinx-rtd-theme
+//
+@code-font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
 
 .content dl:not(.docutils) {
     margin-bottom: 24px;
@@ -12,13 +14,13 @@
 .content dl:not(.docutils) dt {
     display: inline-block;
     margin: 6px 0;
-    font-size: 90%;
     line-height: normal;
     background: lighten(@brand-primary, 50%);
     border-top: solid 3px lighten(@brand-primary, 25%);
     color: lighten(@brand-primary, 20%);
     padding: 6px;
     position: relative;
+    font-family: @code-font-family;
 }
 
 .content dl dd {
@@ -28,15 +30,10 @@
 .content dl:not(.docutils) dl dt {
     margin-bottom: 6px;
     border: none;
-    border-left: solid 3px ;
-}
-
-.content dl:not(.docutils) dl dt {
-    margin-bottom: 6px;
-    border: none;
     border-left: solid 3px lighten(@gray-base, 75%);
     background: lighten(@gray-base, 92%);
     color: lighten(@gray-base, 50%);
+    font-family: @code-font-family;
 }
 
 .content dl:not(.docutils) .property {
@@ -55,30 +52,27 @@ code,
 .content code {
     white-space: nowrap;
     max-width: 100%;
-    background: @body-bg;
-    font-size: 75%;
-    border: solid 1px lighten(@gray-base, 94%);
-    // padding: 0 5px;
-    border-radius: 0px;
-    font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
+    background-color: #ecf0f3;
+    font-size: 96.5%;
+    border: none
+    padding: 0 1px;
+    font-family: @code-font-family;
     color: @text-color;
     overflow-x: auto;
 }
 
 .content code {
-    color: @gray-base;
-    padding: 2px 5px;
+    color: @text-color;
+    border-radius: 3px;
 }
 
-.navbar code.literal,
-.content code.literal {
-    color: mix(@brand-info, @body-bg, 90%);
+.content code.descname {
+    font-size: 120%;
 }
 
 .content code.xref,
 a .content code {
     font-weight: bold;
-    font-size: 90%;
     color: @brand-primary;
     border: none;
     padding: 0px;
@@ -88,7 +82,7 @@ a .content code {
 .content .viewcode-link,
 .content .viewcode-back {
     display: inline-block;
-    color: @brand-info;
+    color: @link-hover-color;
     font-size: 80%;
     padding-left: 24px;
 }
