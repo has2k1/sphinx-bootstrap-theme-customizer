@@ -4,7 +4,15 @@
 // overload. We try to remedy those short falls.
 //
 // This is inspired by the sphinx-rtd-theme
-//
+
+// Sane header sizes
+h1 { font-size: 2em; }
+h2 { font-size: 1.5em; }
+h3 { font-size: 1.17em; }
+h4 { font-size: 1em; }
+h5 { font-size: 0.83em; }
+h6 { font-size: 0.67em; }
+
 @code-font-family: Consolas,"Andale Mono WT","Andale Mono","Lucida Console","Lucida Sans Typewriter","DejaVu Sans Mono","Bitstream Vera Sans Mono","Liberation Mono","Nimbus Mono L",Monaco,"Courier New",Courier,monospace;
 
 .content dl:not(.docutils) {
@@ -97,4 +105,24 @@ a .content code {
     border-left: 3px solid @gray-lighter;
     border-right: 3px solid @gray-lighter;
     background: lighten(@gray-base, 97.5%);
+}
+
+// Footnotes
+table.table.footnote {
+    border: none;
+    font-size: 85%;
+}
+
+table.table.footnote tbody tr td,
+table.table.footnote tbody tr th,
+table.table.footnote tfoot tr td,
+table.table.footnote tfoot tr th,
+table.table.footnote thead tr td,
+table.table.footnote thead tr th {
+    padding: 2px;
+    border: none;
+}
+
+table.table.footnote .label {
+    font-weight: inherit;
 }
