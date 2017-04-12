@@ -22,6 +22,10 @@ of other colors are generated from that one color alone. This
 customizer changes the *@brand_color* `less`_ variable of your
 preferred Bootswatch theme, and then builds a Sphinx theme.
 
+Any variable defined in the `variables.less` file can be changed
+by using its name as the command-line argument followed by a
+replacement value.
+
 Usage
 =====
 
@@ -31,7 +35,13 @@ be generated.
 
 .. code-block:: bash
 
-   $ build '#AACCDD' sandstone
+   $ build --theme sandstone --brand-primary '#AACCDD'
+
+   # other examples
+   $ build --theme darkly --body-bg blue \
+       --panel-body-padding 15px \
+   
+If the `--theme` is not specified, the default value 'united'.
 
 The created theme is stored in the ``theme`` directory. You can then
 copy that theme to the Sphinx directory and with these settings in

@@ -29,28 +29,51 @@ themes=(cerulean cosmo cyborg darkly flatly journal lumen
 
 usage() {
   cat <<EOF
-Usage: build brand_color [base_theme]
-    brand_color : brand_color (in quotes e.g '#FF12AD')
-    base_theme: Theme whose brand_color is to be changed. This is
-                is optional (default is united), should be one of the
-                following:$ocolor
+Usage: build [--theme theme] [--brand-primary color] [...]
+    theme: Theme is to be customized. This is is optional
+           (default is united), should be one of the
+           following:$ocolor
+    --brand-primary : color (in quotes e.g '#FF12AD')
+    [...] - other variables specified in the variables.less
+    file, without the '@' symbol. Any hex colors must be
+    quoted so that '#' is not parse as a comment delimeter.
+
+    eg. build --theme flatly --brand-color '#F1F1F1' --font-size-base 15px
 ${themes[*]} $reset
 EOF
 }
 
-# Some argument verification
-if [[ $# -eq 0 ]] || [[ $# -gt 2 ]]; then
-  usage
-  exit 1
-elif [[ $# -eq 1 ]]; then
-  brand_color=$1
-  base_theme='united'
-elif [[ $# -eq 2 ]]; then
-  brand_color=$1
-  base_theme=$2
+ # default values
+base_theme='united'
+primary=''
+success=''
+info=''
+warning=''
+danger=''
+
+
+declare -A variables
+
+while [[ "$#" > 1 ]]; do
+  var=$1
+  if [[ $var =~ ^-- ]]; then
+    name=${var:2}  # strip the --
+    variables[$name]="$2"
+  fi
+
+  # Shift past the argname and value (2 tokens)
+  shift; shift
+done
+
+
+# the theme is not part of the less variables
+if [[ -n ${variables[theme]} ]]; then
+  base_theme=${variables[theme]}
+  unset variables[theme]
 fi
 
-if [[ ! " ${themes[@]} " =~ " ${base_theme} " ]]; then
+
+if [[ ! "${themes[@]}" =~ "${base_theme}" ]]; then
   usage
   exit 1
 fi
@@ -80,12 +103,28 @@ mkdir -p $jquery_dir
 cp -f {$base_theme_dir,$theme_dir}/variables.less
 cp -f {$base_theme_dir,$theme_dir}/bootswatch.less
 
-# Do customization
-{ cat $variables_file | \
-  sed -e "s/\(@brand-primary:\s\+\)\(#\w\+\);/\1$brand_color;/g"
-} > $variables_file.2
+# Function to customize the colors
+# How to use it?
+# $cat variables.less | substitute 'brand-primary' '#ff0011'
+substitute() {
+  variable=$1
+  value=$2
+  if [[ -n "$value" ]]; then
+    cat | sed -e "s/\(@$variable:\s\+\)\(.\+\);/\1$value;/g"
+  else
+    cat
+  fi
+}
 
-mv -f $variables_file.2 $variables_file
+# Do customization
+contents=$(cat $variables_file)
+
+for name in "${!variables[@]}"; do
+  value=${variables[$name]}
+  contents=$(echo "$contents" | substitute $name $value)
+done
+
+echo "$contents" > $variables_file
 
 # Compile and minify (into the final destination)
 lessc build.less > theme/bootstrap.css
