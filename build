@@ -84,7 +84,7 @@ export PS4='$tcolor+(${BASH_SOURCE}:${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}():
 
 base_theme_dir="./bootswatch/$base_theme/"
 bootstrap_dir="sphinx-bootstrap-theme/sphinx_bootstrap_theme/bootstrap"
-bootstrap_version="bootstrap-3.3.6"
+bootstrap_version="bootstrap-3.3.7"
 variables_file="theme/variables.less"
 
 # Destination directories
