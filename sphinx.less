@@ -19,7 +19,8 @@ h6 { font-size: 0.67em; }
     margin-bottom: 24px;
 }
 
-.content dl:not(.docutils) dt {
+.content dl.function > dt,
+.content dl:not(.docutils).class > dt {
     display: inline-block;
     margin: 6px 0;
     line-height: normal;
@@ -35,13 +36,36 @@ h6 { font-size: 0.67em; }
     margin: 0 0 12px 24px;
 }
 
-.content dl:not(.docutils) dl dt {
-    margin-bottom: 6px;
+.content td.field-body dd {
+    margin: 0 0 6px 24px;
+}
+
+.content dl:not(.docutils).class dl.method > dt,
+.content dl:not(.docutils).class dl.classmethod > dt,
+.content dl:not(.docutils).class dl.staticmethod > dt {
+    display: inline-block;
+    margin: 6px 0;
+    line-height: normal;
     border: none;
     border-left: solid 3px lighten(@gray-base, 75%);
     background: lighten(@gray-base, 92%);
     color: lighten(@gray-base, 50%);
+    padding: 6px;
     font-family: @code-font-family;
+}
+
+.content td.field-body {
+    padding: 0 0 0 8px;
+}
+
+.content td.field-body dl.docutils > dt {
+    background: none;
+    border-left: none;
+    color: @text-color;
+}
+
+.content td.field-body dl.docutils > dt span.classifier{
+    font-weight: normal;
 }
 
 .content dl:not(.docutils) .property {
@@ -125,4 +149,48 @@ table.table.footnote thead tr th {
 
 table.table.footnote .label {
     font-weight: inherit;
+}
+
+// Better formatting for numpydoc parameter field lists
+// !important to override custom.css from sphinx-bootstrap
+
+table.field-list {
+   border-collapse: collapse;
+   border-spacing: 5px;
+   margin-left: 1px;
+   border-left: 5px solid rgb(238, 238, 238) !important;
+}
+
+table.field-list th.field-name {
+   display: inline-block;
+   padding: 1px 8px 1px 5px;
+   white-space: nowrap;
+   background-color: rgb(238, 238, 238);
+}
+
+td.field-body blockquote {
+    border: none;
+    margin: 0;
+    padding: 5px;
+    padding-left: 30px;
+    background: white;
+}
+
+.content table.field-list dd table {
+    margin-top: 1em;
+    font-size : 0.95em;
+}
+
+.content table.field-list dd table>thead>tr>th  {
+    white-space: nowrap;
+    border-bottom: 2px solid #DDD !important;
+}
+
+.content table.field-list dd table>tbody>tr>td  {
+    border-top: 1px solid #DDD  !important;
+}
+
+.content table.field-list dd>table>tbody>tr>td,
+.content table.field-list dd>table>thead>tr>th {
+    border-left: 1px solid #DDD !important;
 }
